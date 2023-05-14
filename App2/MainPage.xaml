@@ -1,0 +1,35 @@
+﻿<Page
+    x:Class="App2.MainPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:App2"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+    <Grid x:Name="grid1" >
+
+        <Grid.RowDefinitions >
+            <RowDefinition Height="0.1*"/>
+            <RowDefinition Height="0.9*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid Grid.Row="1" Height="391" Width="770" VerticalAlignment="Center" HorizontalAlignment="Center">
+            <Rectangle x:Name="rect" Fill="AliceBlue" RadiusX="25" RadiusY="25" HorizontalAlignment="Center" Height="391" Stroke="Black" VerticalAlignment="Top" Width="770"/>
+            <Rectangle Fill="White" RadiusX="25" RadiusY="25" HorizontalAlignment="Center" Height="70" Margin="0,161,0,0" Stroke="Black" VerticalAlignment="Top" Width="486"/>
+            <Rectangle Fill="White" RadiusX="25" RadiusY="25" HorizontalAlignment="Center" Height="70" Margin="0,56,0,0" Stroke="Black" VerticalAlignment="Top" Width="486"/>
+            <Button x:Name="button1" Content="Войти" CornerRadius="25" Background="White" BorderThickness="1" BorderBrush="Black" HorizontalAlignment="Center" Height="70" Width="486" Margin="0,291,0,0" VerticalAlignment="Top" FontSize="38" FontFamily="Palatino Linotype" Click="Button_Click"/>
+            <TextBox x:Name="login" HorizontalAlignment="Left" Margin="167,69,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Height="45" Width="442" FontSize="24" TextAlignment="Left" FontFamily="Palatino Linotype" BorderThickness="0" PlaceholderText="Логин" />
+            <PasswordBox x:Name="pass"  PasswordChar="*" PreviewKeyDown="pass_PreviewKeyDown" IsPasswordRevealButtonEnabled="True" Margin="0,173,0,173" Height="45" VerticalContentAlignment="Center" Width="442" FontSize="24" FontFamily="Palatino Linotype" BorderThickness="0" PlaceholderText="Пароль" HorizontalAlignment="Center"/>
+            <TextBlock x:Name="textblock" HorizontalAlignment="Left" Margin="164,236,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" FontSize="16" TextAlignment="Left" FontFamily="Palatino Linotype" Height="41" Width="378"/>
+
+        </Grid>
+        <ComboBox Grid.Row="0" x:Name="combobox1" SelectionChanged="combobox1_SelectionChanged" PlaceholderText="Выберите сервер" Width="264" Height="38" HorizontalAlignment="Right"/>
+        <Ellipse x:Name="round_st" HorizontalAlignment="Right" Height="37" Fill="Gray" VerticalAlignment="Top" Width="37" Margin="0,0,270,0" ManipulationMode="All" RenderTransformOrigin="1.124,-0.551"/>
+        <Rectangle x:Name="round" HorizontalAlignment="Left" Height="100" Margin="1468,432,0,0" Grid.Row="1" Stroke="Black" Visibility="Collapsed" Fill="Black" VerticalAlignment="Top" Width="100"/>
+
+    </Grid>
+</Page>
