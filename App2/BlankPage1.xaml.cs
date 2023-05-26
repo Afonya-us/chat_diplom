@@ -346,9 +346,11 @@ namespace App2
             
         }
 
-        
-
-       
+        private void user_image_Click(object sender, RoutedEventArgs e)
+        {
+            Frame.Navigate(typeof(BlankPage2), arr);
+          
+        }
     }
 }
     

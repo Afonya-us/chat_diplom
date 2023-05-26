@@ -13,6 +13,9 @@
         <Style TargetType="TextBox">
             <Setter Property="FontFamily" Value="Palatino Linotype" />
         </Style>
+        <Style TargetType="Button">
+            <Setter Property="FontFamily" Value="Palatino Linotype" />
+        </Style>
 
     </Application.Resources>
         

@@ -40,7 +40,7 @@
 
         <TextBox x:Name="tb1" FontSize="18"  HorizontalAlignment="Center" Grid.Row="0" Grid.Column="0" BorderThickness="1" PlaceholderText="Найти..." Width="300" Height="35"  VerticalAlignment="Top" Margin="0,15,15,0" Background="White" CornerRadius="10"/>
         <Button Grid.Row="0" Grid.Column="0" Width="35" Height="35" VerticalAlignment="top" HorizontalAlignment="Right" CornerRadius="10" Background="#FF2B9FEA" Margin="0,15,15,0"></Button>
-        <Button x:Name="user_image" HorizontalAlignment="Left" VerticalAlignment="Center" Height="80" CornerRadius="90" Background="Bisque" Margin="10,0,0,0" Grid.Row="2" Grid.Column="0" Width="80"/>
+        <Button x:Name="user_image" Click="user_image_Click" HorizontalAlignment="Left" VerticalAlignment="Center" Height="80" CornerRadius="90" Background="Bisque" Margin="10,0,0,0" Grid.Row="2" Grid.Column="0" Width="80"/>
         <TextBlock x:Name="user_name" Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="100,0,0,0" Text="gfdhfd" FontSize="28"/>
         <TextBlock x:Name="nick_chat" Grid.Column="1" Grid.Row="0" HorizontalAlignment="Left" Margin="20,5,0,0" TextWrapping="Wrap" VerticalAlignment="Top"   Height="36" FontSize="24" />
 
