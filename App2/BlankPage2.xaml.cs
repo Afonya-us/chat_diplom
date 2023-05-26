@@ -111,7 +111,29 @@ namespace App2
 
         private void acc_chng_Click(object sender, RoutedEventArgs e)
         {
+            using (SqlConnection connection = new SqlConnection(connection_string))
+            {
+                SqlDataAdapter adapter = new SqlDataAdapter($"select * from dbo.user_list where user_id='{user}'", connection);
+                // Создаем объект DataSet
+                DataSet ds = new DataSet();
+                // Заполняем Dataset
+                adapter.Fill(ds);
+                DataTable dt = ds.Tables[0];
+                try
+                {
+                    SqlCommand command = new SqlCommand($"UPDATE user_list SET user_nickname ='{username_text.Text}' WHERE user_id = '{user}'", connection);
 
+                    connection.Open();
+                    command.ExecuteNonQuery();
+                    set_user_img();
+                    connection.Close();
+                }
+                catch (Exception ex)
+                {
+                    username_text.Text = ex.ToString();
+                }
+            }
+            Frame.Navigate(typeof(BlankPage1), arr);
         }
 
         private async void ellipse_Click(object sender, RoutedEventArgs e)
@@ -149,7 +171,8 @@ namespace App2
                             SqlCommand command = new SqlCommand($"UPDATE user_list SET user_img = BulkColumn FROM Openrowset(BULK '{file.Path}', Single_Blob) AS Image WHERE user_id = '{user}'", connection);
 
                             connection.Open();
-                            command.ExecuteNonQuery();
+                            command.ExecuteNonQuery();                          
+                            set_user_img();
                             connection.Close();
                         }
                         catch(Exception ex)
@@ -161,10 +184,7 @@ namespace App2
                      }
 
                  }
-                 else
-                 {
-
-                 }
+                 
         }
         }    
     }

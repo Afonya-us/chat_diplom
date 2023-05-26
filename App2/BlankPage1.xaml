@@ -10,39 +10,47 @@
 
     <Grid Background="AliceBlue">
         <Grid.RowDefinitions >
-            <RowDefinition Height="0.05*"/>
-            <RowDefinition Height="0.80*"/>
+            <RowDefinition Height="0.10*"/>
+            <RowDefinition Height="0.75*"/>
             <RowDefinition Height="0.15*"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="0.25*"/>
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
-        <TextBox x:Name="msg_text" Grid.Row="2" Grid.Column="1" TextWrapping="Wrap" AcceptsReturn="True" ScrollViewer.IsVerticalRailEnabled="True" Margin="0,0,70,-10" VerticalAlignment="Center" BorderThickness="0"  MaxHeight="105" CornerRadius="15" Height="55" Background="White"  ></TextBox>
-        <Button x:Name="send_btn" Grid.Row="2" Click="send_btn_Click" Grid.Column="1" Width="55" Height="55" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,70,-10" CornerRadius="60" Background="#FF2B9FEA"></Button>
+        <TextBox x:Name="msg_text" Grid.Row="2" Grid.Column="1" TextWrapping="Wrap" AcceptsReturn="True" ScrollViewer.IsVerticalRailEnabled="True" Margin="20,0,190,20" VerticalAlignment="Center" BorderThickness="0"  MaxHeight="105" CornerRadius="15" Height="55" Background="White"  ></TextBox>
+        <Button x:Name="send_btn" Grid.Row="2" Click="send_btn_Click" Grid.Column="1" Width="75" Height="55" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,50,20" CornerRadius="20" Background="#FF2B9FEA"></Button>
+        <Button x:Name="file_btn" Grid.Row="2" Click="file_btn_Click" Grid.Column="1" Width="55" Height="55" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,130,20" CornerRadius="20" Background="LightSkyBlue"></Button>
 
 
 
         <Rectangle Grid.Row="1" Grid.Column="0" Fill="White" Margin="15,25,15,-15" RadiusX="25" RadiusY="25"></Rectangle>
-        <Rectangle Grid.Row="1" Grid.Column="1" Fill="White" Margin="0,-15,15,-15" RadiusX="25" RadiusY="25"></Rectangle>
+        <Rectangle Grid.Row="1" Grid.Column="1" Fill="White" Margin="0, -15,15,-15" RadiusX="17" RadiusY="17"></Rectangle>
 
         <ScrollViewer Grid.Row="1" Grid.Column="0" Margin="15,25,15,-15" CornerRadius="25" >
             <StackPanel x:Name="msgs">
 
             </StackPanel>
         </ScrollViewer>
-        <ScrollViewer  x:Name="chat_scroll" Grid.Row="1" Grid.Column="1" Margin="10,5,25,5">
+        <ScrollViewer  x:Name="chat_scroll" Grid.Row="1" Grid.Column="1" Margin="10,0,25,5">
             <StackPanel x:Name="chat">
 
             </StackPanel>
         </ScrollViewer>
-        <Button Grid.Row="0" Grid.Column="1" Width="35" Height="35" Content="X" CornerRadius="90" HorizontalAlignment="Right" Margin="0,0,15,10" x:Name="close_dial" Click="close_dial_Click"/>
+        <Button Grid.Row="1" Grid.Column="1" Width="35" Height="35" Content="X" CornerRadius="90" Visibility="Collapsed" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0,-10,15,10" x:Name="close_dial" Click="close_dial_Click"/>
 
-        <TextBox x:Name="tb1" FontSize="18"  HorizontalAlignment="Center" Grid.Row="0" Grid.Column="0" BorderThickness="1" PlaceholderText="Найти..." Width="300" Height="35"  VerticalAlignment="Top" Margin="0,15,15,0" Background="White" CornerRadius="10"/>
-        <Button Grid.Row="0" Grid.Column="0" Width="35" Height="35" VerticalAlignment="top" HorizontalAlignment="Right" CornerRadius="10" Background="#FF2B9FEA" Margin="0,15,15,0"></Button>
+        <TextBox x:Name="tb1" FontSize="18"  HorizontalAlignment="Center" Grid.Row="0" Grid.Column="0" BorderThickness="1" PlaceholderText="Найти..." TextWrapping="Wrap" Height="35" MinWidth="200" MaxWidth="320" MaxLength="20" VerticalAlignment="Center" Margin="0,15,15,0" Background="White" CornerRadius="10"/>
+
+        <Button Grid.Row="0" x:Name="find" Click="find_Click" Grid.Column="0" Width="35" Height="35" VerticalAlignment="Center" HorizontalAlignment="Right" CornerRadius="10" Background="#FF2B9FEA" Margin="0,15,15,0"></Button>
+
         <Button x:Name="user_image" Click="user_image_Click" HorizontalAlignment="Left" VerticalAlignment="Center" Height="80" CornerRadius="90" Background="Bisque" Margin="10,0,0,0" Grid.Row="2" Grid.Column="0" Width="80"/>
         <TextBlock x:Name="user_name" Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="100,0,0,0" Text="gfdhfd" FontSize="28"/>
-        <TextBlock x:Name="nick_chat" Grid.Column="1" Grid.Row="0" HorizontalAlignment="Left" Margin="20,5,0,0" TextWrapping="Wrap" VerticalAlignment="Top"   Height="36" FontSize="24" />
+
+        <Button x:Name="dial_image" Click="dial_image_Click" HorizontalAlignment="Left" VerticalAlignment="Center" Height="60" CornerRadius="90" Visibility="Collapsed" Background="Bisque" Margin="10,0,0,0" Grid.Row="0" Grid.Column="1" Width="60"/>
+
+        <TextBlock x:Name="nick_chat" Grid.Column="1" Grid.Row="0" HorizontalAlignment="Left" Margin="80,5,0,0" TextWrapping="Wrap" VerticalAlignment="Center"   Height="36" FontSize="24" />
+        <Border x:Name="file_border" Grid.Column="2"  Height="40" Margin="0,0,60,10" CornerRadius="15" Background="White" Visibility="Collapsed" VerticalAlignment="Bottom" HorizontalAlignment="Right" Grid.Row="2"  BorderBrush="Black" Width="120"/>
+
 
 
     </Grid>

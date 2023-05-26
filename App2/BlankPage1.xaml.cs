@@ -51,6 +51,9 @@ namespace App2
         public byte[] us_img_data;
         public Boolean img_bool;
 
+        public byte[] file;
+        public Boolean file_bool;
+
         public int users_count;
 
 
@@ -61,40 +64,49 @@ namespace App2
             conn = splited[1].ToString();
             user = Convert.ToInt32(splited[0]);
             connection_string = "Server=" + conn + "; Database = Chat; user=admin; password=admin; encrypt = false;";
-            using (SqlConnection connection = new SqlConnection(connection_string))
-            {
-                connection.Open();
-                SqlCommand comm = new SqlCommand("SELECT COUNT(*) FROM dbo.user_list", connection);
-                users_count = (Int32)comm.ExecuteScalar();
-                SqlDataAdapter adapter = new SqlDataAdapter("select * from dbo.user_list", connection);
-                // Создаем объект DataSet
-                DataSet ds = new DataSet();
-                // Заполняем Dataset
-                adapter.Fill(ds);
-                DataTable dt = ds.Tables[0];
-
-                for (int i = 0; i < (int)users_count; i++)
-                {
-
-                    Border bord = new Border();
-                    bord.Height = 80;
-                    bord.Margin = new Thickness(10, 10, 20, 10);
-                    bord.Background = new SolidColorBrush(Colors.White);
-                    bord.BorderThickness = new Thickness(1);
-                    bord.BorderBrush = new SolidColorBrush(Colors.Black);
-                    bord.CornerRadius = new CornerRadius(15);
-                    bord.Tapped += new TappedEventHandler(bord_tap);
-                    bord.Name = dt.Rows[i][0].ToString();
-                    msgs.Children.Add(bord);
-
-                    TextBlock tb_user = new TextBlock();
-                    tb_user.Text = dt.Rows[i][6].ToString();
-                    tb_user.VerticalAlignment = VerticalAlignment.Center;
-                    tb_user.HorizontalAlignment = HorizontalAlignment.Center;
-                    bord.Child = tb_user;
-                }
-            }
+            show_dialogs();
         }
+
+        public async void show_dialogs()
+        {
+            await Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal,
+               () =>
+               {
+                   using (SqlConnection connection = new SqlConnection(connection_string))
+                   {
+                       connection.Open();
+                       SqlCommand comm = new SqlCommand("SELECT COUNT(*) FROM dbo.user_list", connection);
+                       users_count = (Int32)comm.ExecuteScalar();
+                       SqlDataAdapter adapter = new SqlDataAdapter($"select * from dbo.user_list where user_id!='{user}'", connection);
+                       // Создаем объект DataSet
+                       DataSet ds = new DataSet();
+                       // Заполняем Dataset
+                       adapter.Fill(ds);
+                       DataTable dt = ds.Tables[0];
+
+                       for (int i = 0; i < (int)users_count - 1; i++)
+                       {
+
+                           Border bord = new Border();
+                           bord.Height = 80;
+                           bord.Margin = new Thickness(10, 10, 20, 10);
+                           bord.Background = new SolidColorBrush(Colors.White);
+                           bord.BorderThickness = new Thickness(1);
+                           bord.BorderBrush = new SolidColorBrush(Colors.Black);
+                           bord.CornerRadius = new CornerRadius(15);
+                           bord.Tapped += new TappedEventHandler(bord_tap);
+                           bord.Name = dt.Rows[i][0].ToString();
+                           msgs.Children.Add(bord);
+
+                           TextBlock tb_user = new TextBlock();
+                           tb_user.Text = dt.Rows[i][6].ToString();
+                           tb_user.VerticalAlignment = VerticalAlignment.Center;
+                           tb_user.HorizontalAlignment = HorizontalAlignment.Center;
+                           bord.Child = tb_user;
+                       }
+                   }
+               });
+        } 
 
         public async void load_image()
         {
@@ -174,7 +186,93 @@ namespace App2
             }
         }
 
-       
+        public async void get_dialog_byfind()
+        {
+            await Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal,
+              () =>
+              {
+                  msgs.Children.Clear();
+                  using (SqlConnection connection = new SqlConnection(connection_string))
+                  {
+                      connection.Open();
+                      SqlCommand comm = new SqlCommand($"SELECT COUNT(*) FROM dbo.user_list where user_nickname like '{tb1.Text}%' and user_id!='{user}'", connection);
+                      users_count = (Int32)comm.ExecuteScalar();
+                      SqlDataAdapter adapter = new SqlDataAdapter($"select * from dbo.user_list where user_nickname like '{tb1.Text}%' and user_id!='{user}'", connection);
+                      // Создаем объект DataSet
+                      DataSet ds = new DataSet();
+                      // Заполняем Dataset
+                      adapter.Fill(ds);
+                      DataTable dt = ds.Tables[0];
+
+                      for (int i = 0; i < (int)users_count; i++)
+                      {
+
+                          Border bord = new Border();
+                          bord.Height = 80;
+                          bord.Margin = new Thickness(10, 10, 20, 10);
+                          bord.Background = new SolidColorBrush(Colors.White);
+                          bord.BorderThickness = new Thickness(1);
+                          bord.BorderBrush = new SolidColorBrush(Colors.Black);
+                          bord.CornerRadius = new CornerRadius(15);
+                          bord.Tapped += new TappedEventHandler(bord_tap);
+                          bord.Name = dt.Rows[i][0].ToString();
+                          msgs.Children.Add(bord);
+
+                          TextBlock tb_user = new TextBlock();
+                          tb_user.Text = dt.Rows[i][6].ToString();
+                          tb_user.VerticalAlignment = VerticalAlignment.Center;
+                          tb_user.HorizontalAlignment = HorizontalAlignment.Center;
+                          bord.Child = tb_user;
+                      }
+                  }
+              });
+        }
+
+        public async void get_img_dial()
+        {
+            using (SqlConnection connection = new SqlConnection(connection_string))
+            {
+                
+                try {
+                    connection.Open();
+                    SqlCommand command = new SqlCommand("select user_img from dbo.user_list where user_id=@user", connection);
+                command.Parameters.AddWithValue("@user", user_flist);
+               
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            us_img_data = (byte[])reader.GetValue(0);
+                        }
+
+                        using (var stream = new InMemoryRandomAccessStream())
+                        {
+                            using (var writer = new DataWriter(stream.GetOutputStreamAt(0)))
+                            {
+                                writer.WriteBytes(us_img_data);
+                                await writer.StoreAsync();
+                            }
+
+                            var bitmap = new BitmapImage();
+                            await bitmap.SetSourceAsync(stream);
+
+                            var brush = new ImageBrush { ImageSource = bitmap };
+                            await Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal,
+                            () =>
+                            {
+                                dial_image.Background = brush;
+
+                            });
+                        }
+                    }
+                   
+                }
+                catch (Exception ex)
+                {
+                    dial_image.Background = new SolidColorBrush(Colors.Aquamarine);
+                }
+            }
+        }
 
 
 
@@ -206,7 +304,7 @@ namespace App2
 
         public async void show_msgs()
         {
-
+            
             using (SqlConnection connection = new SqlConnection(connection_string))
             {
                 connection.Open();
@@ -226,7 +324,8 @@ namespace App2
                     adapter.Fill(ds);
                     DataTable dt = ds.Tables[0];
                     int msg_count = dt.Rows.Count;
-
+                    get_img_dial();
+                    dial_image.Visibility = Visibility.Visible;
                     for (int i = 0; i < msg_count; i++)
                     {
                         if (Convert.ToInt32(dt.Rows[i][1]) == user)
@@ -271,6 +370,7 @@ namespace App2
                             tb_user.HorizontalAlignment = HorizontalAlignment.Center;
                             msg.Child = tb_user;
                         }
+                        close_dial.Visibility = Visibility.Visible;
                     }
                 }
             });
@@ -279,6 +379,7 @@ namespace App2
         
         public void bord_tap(object sender, TappedRoutedEventArgs e)
         {
+            close_dial_Click(sender,e);
             user_flist = ((FrameworkElement)sender).Name;
             dg_op = true;
             using (SqlConnection connection = new SqlConnection(connection_string))
@@ -286,13 +387,16 @@ namespace App2
                 connection.Open();
                 SqlCommand cmd = new SqlCommand($"select user_nickname from dbo.user_list where user_id={user_flist}", connection);
                 nick_chat.Text = cmd.ExecuteScalar().ToString();
+
             }
             var myTimer = new System.Threading.Timer(timer_Elapsed, null, 0, 1000);
             chat.Children.Clear();
             show_msgs();
+            close_dial.Visibility = Visibility.Visible;
+
         }
 
-        
+
 
         private void send_btn_Click(object sender, RoutedEventArgs e)
         {
@@ -305,14 +409,23 @@ namespace App2
                 adapter.Fill(ds);
                 DataTable dt = ds.Tables[0];
                 string message = msg_text.Text;
-                connection.Open();
-
-                SqlCommand cmd = new SqlCommand($"insert into dbo.msg_list(msg_sender,msg_getter,msg_text,msg_file,msg_sent) values ('{user}', '{user_flist}','{message}',null,getdate())",connection);
-                cmd.ExecuteNonQuery();
-
+                if (file_bool!=true && message.Length!=0) {
+                    connection.Open();
+                    SqlCommand cmd = new SqlCommand($"insert into dbo.msg_list(msg_sender,msg_getter,msg_text,msg_file,msg_sent) values ('{user}', '{user_flist}','{message}',null,getdate())", connection);
+                    cmd.ExecuteNonQuery();
+                }
+                else
+                {
+                    if (file_bool == true)
+                    {
+                        connection.Open();
+                        SqlCommand cmd = new SqlCommand($"insert into dbo.msg_list(msg_sender,msg_getter,msg_text,msg_file,msg_sent) values ('{user}', '{user_flist}','{message}',null,getdate())", connection);
+                        cmd.ExecuteNonQuery();
+                    }
+                }
                 Border msg = new Border();
                 msg.Margin = new Thickness(10, 10, 20, 10);
-                msg.Background = new SolidColorBrush(Colors.Gray);
+                msg.Background = new SolidColorBrush(Colors.LightGray);
                 msg.MaxWidth = 400;
                 msg.CornerRadius = new CornerRadius(15);
                 msg.HorizontalAlignment = HorizontalAlignment.Right;
@@ -337,19 +450,75 @@ namespace App2
 
         
 
-        private void close_dial_Click(object sender, RoutedEventArgs e)
+        public void close_dial_Click(object sender, RoutedEventArgs e)
         {
             dg_op = false;
             chat.Children.Clear();
-           
-                nick_chat.Text = string.Empty;
-            
+            nick_chat.Text = string.Empty;
+            dial_image.Visibility = Visibility.Collapsed;
+            close_dial.Visibility = Visibility.Collapsed;
+            add_file = null;
+            file_bool = false;
+            file_border.Visibility = Visibility.Collapsed;
         }
 
         private void user_image_Click(object sender, RoutedEventArgs e)
         {
             Frame.Navigate(typeof(BlankPage2), arr);
           
+        }
+
+        private void dial_image_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void find_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                get_dialog_byfind();
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+
+        public Windows.Storage.StorageFile add_file=null;
+
+        private async void file_btn_Click(object sender, RoutedEventArgs e)
+        {
+            var picker = new Windows.Storage.Pickers.FileOpenPicker();
+            picker.ViewMode = Windows.Storage.Pickers.PickerViewMode.Thumbnail;
+            picker.SuggestedStartLocation = Windows.Storage.Pickers.PickerLocationId.PicturesLibrary;
+            picker.FileTypeFilter.Add(".jpg");
+            picker.FileTypeFilter.Add(".jpeg");
+            picker.FileTypeFilter.Add(".png");
+            picker.FileTypeFilter.Add(".rar");
+            picker.FileTypeFilter.Add(".zip");
+            picker.FileTypeFilter.Add(".doc");
+            picker.FileTypeFilter.Add(".docx");
+            picker.FileTypeFilter.Add(".xlsx");
+
+            add_file = await picker.PickSingleFileAsync();
+
+            if (add_file != null) 
+            {
+                file_bool = true;
+
+                file_border.Visibility = Visibility.Visible;
+
+                TextBlock file_name = new TextBlock();
+                file_name.Text = add_file.Name;
+                file_name.VerticalAlignment = VerticalAlignment.Center;
+                file_name.HorizontalAlignment = HorizontalAlignment.Center;
+                file_border.Child=file_name;
+            }
+            else
+            {
+                file_bool = false;
+            }
         }
     }
 }
