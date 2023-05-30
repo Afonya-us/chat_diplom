@@ -52,7 +52,7 @@ namespace App2
         public Boolean img_bool;
 
         public byte[] file;
-        public Boolean file_bool;
+        public Boolean file_bool = false;
 
         public int users_count;
 
@@ -302,6 +302,10 @@ namespace App2
             }
         }
 
+        
+
+
+
         public async void show_msgs()
         {
             
@@ -328,27 +332,36 @@ namespace App2
                     dial_image.Visibility = Visibility.Visible;
                     for (int i = 0; i < msg_count; i++)
                     {
-                        if (Convert.ToInt32(dt.Rows[i][1]) == user)
-                        {
-                            Border msg = new Border();
-                            msg.Margin = new Thickness(10, 10, 20, 10);
-                            msg.Background = new SolidColorBrush(Colors.LightGray);
-                            msg.MaxWidth = 400;
-                            msg.CornerRadius = new CornerRadius(15);
-                            msg.HorizontalAlignment = HorizontalAlignment.Right;
-                            chat.Children.Add(msg);
+                        if (Convert.ToInt32(dt.Rows[i][1]) == user )
+                        {                           
+                                Border msg = new Border();
+                                msg.Margin = new Thickness(10, 10, 20, 10);
+                                msg.Background = new SolidColorBrush(Colors.LightGray);
+                                msg.MaxWidth = 400;
+                                msg.CornerRadius = new CornerRadius(15);
+                                msg.HorizontalAlignment = HorizontalAlignment.Right;
+                                chat.Children.Add(msg);
 
-                            TextBlock tb_user = new TextBlock();
-                            string date = Convert.ToDateTime(dt.Rows[i][6]).ToString("dd.MM.yyyy HH:mm");
-                            tb_user.Text = $"{dt.Rows[i][3].ToString()}\n\n {date}";
-                            tb_user.VerticalAlignment = VerticalAlignment.Center;
-                            tb_user.Margin = new Thickness(10, 10, 10, 10);
-                            tb_user.TextWrapping = TextWrapping.Wrap;
-                            tb_user.MaxWidth = 400;
-                            tb_user.HorizontalAlignment = HorizontalAlignment.Center;
-                            msg.Child = tb_user;
-
-
+                                TextBlock tb_user = new TextBlock();
+                                string date = Convert.ToDateTime(dt.Rows[i][6]).ToString("dd.MM.yyyy HH:mm");
+                                tb_user.Text = $"{dt.Rows[i][3].ToString()}\n\n {date}";
+                                tb_user.VerticalAlignment = VerticalAlignment.Center;
+                                tb_user.Margin = new Thickness(10, 10, 10, 10);
+                                tb_user.TextWrapping = TextWrapping.Wrap;
+                                tb_user.MaxWidth = 400;
+                                tb_user.HorizontalAlignment = HorizontalAlignment.Center;
+                                msg.Child = tb_user;
+                            int file_len = dt.Rows[i][4].ToString().Length;
+                            if (file_len > 0)
+                            {
+                                Button file_btn = new Button();
+                                file_btn.Margin = new Thickness(0, -20, 10, 0);
+                                file_btn.Content = dt.Rows[i][8].ToString();
+                                file_btn.HorizontalAlignment = HorizontalAlignment.Right;
+                                file_btn.CornerRadius = new CornerRadius(15);
+                                file_btn.Background = new SolidColorBrush(Colors.AliceBlue);
+                                chat.Children.Add(file_btn);
+                            }
                         }
                         else
                         {
@@ -369,6 +382,17 @@ namespace App2
                             tb_user.MaxWidth = 400;
                             tb_user.HorizontalAlignment = HorizontalAlignment.Center;
                             msg.Child = tb_user;
+                            int file_len = dt.Rows[i][4].ToString().Length;
+                            if (file_len >0)
+                            {
+                                Button file_btn = new Button();
+                                file_btn.Margin = new Thickness(0, -20, 10, 0);
+                                file_btn.Content = dt.Rows[i][8].ToString();
+                                file_btn.HorizontalAlignment = HorizontalAlignment.Left;
+                                file_btn.CornerRadius = new CornerRadius(15);
+                                file_btn.Background = new SolidColorBrush(Colors.AliceBlue);
+                                chat.Children.Add(file_btn);
+                            }
                         }
                         close_dial.Visibility = Visibility.Visible;
                     }
@@ -409,40 +433,68 @@ namespace App2
                 adapter.Fill(ds);
                 DataTable dt = ds.Tables[0];
                 string message = msg_text.Text;
-                if (file_bool!=true && message.Length!=0) {
+                if (file_bool==false && message.Length!=0) {
                     connection.Open();
-                    SqlCommand cmd = new SqlCommand($"insert into dbo.msg_list(msg_sender,msg_getter,msg_text,msg_file,msg_sent) values ('{user}', '{user_flist}','{message}',null,getdate())", connection);
+                    SqlCommand cmd = new SqlCommand($"insert into dbo.msg_list(msg_sender,msg_getter,msg_text,msg_file,msg_sent) values ('{user}', '{user_flist}','{message}', null,getdate())", connection);
                     cmd.ExecuteNonQuery();
+                    Border msg = new Border();
+                    msg.Margin = new Thickness(10, 10, 20, 10);
+                    msg.Background = new SolidColorBrush(Colors.LightGray);
+                    msg.MaxWidth = 400;
+                    msg.CornerRadius = new CornerRadius(15);
+                    msg.HorizontalAlignment = HorizontalAlignment.Right;
+                    chat.Children.Add(msg);
+
+                    TextBlock tb_user = new TextBlock();
+                    tb_user.Text = $"{msg_text.Text}\n\n {DateTime.Now.ToString("dd.MM.yyyy HH:mm")}";
+                    tb_user.Margin = new Thickness(10, 20, 20, 10);
+                    tb_user.VerticalAlignment = VerticalAlignment.Center;
+                    tb_user.Margin = new Thickness(10, 10, 10, 10);
+                    tb_user.TextWrapping = TextWrapping.Wrap;
+                    tb_user.MaxWidth = 400;
+                    tb_user.HorizontalAlignment = HorizontalAlignment.Center;
+                    msg.Child = tb_user;
                 }
                 else
                 {
                     if (file_bool == true)
                     {
                         connection.Open();
-                        SqlCommand cmd = new SqlCommand($"insert into dbo.msg_list(msg_sender,msg_getter,msg_text,msg_file,msg_sent) values ('{user}', '{user_flist}','{message}',null,getdate())", connection);
+                        SqlCommand cmd = new SqlCommand($"insert into dbo.msg_list(msg_sender,msg_getter,msg_text,msg_sent,msg_file_type,msg_file_name,msg_file) select '{user}', '{user_flist}','{message}', getdate(),'{add_file.FileType}','{add_file.Name}', * FROM OPENROWSET(BULK N'{add_file.Path}', SINGLE_BLOB) rs", connection);
                         cmd.ExecuteNonQuery();
+                        Border msg = new Border();
+                        msg.Margin = new Thickness(10, 10, 20, 10);
+                        msg.Background = new SolidColorBrush(Colors.LightGray);
+                        msg.MaxWidth = 400;
+                        msg.CornerRadius = new CornerRadius(15);
+                        msg.HorizontalAlignment = HorizontalAlignment.Right;
+                        chat.Children.Add(msg);
+
+                        TextBlock tb_user = new TextBlock();
+                        tb_user.Text = $"{msg_text.Text}\n\n {DateTime.Now.ToString("dd.MM.yyyy HH:mm")}";
+                        tb_user.Margin = new Thickness(10, 20, 20, 10);
+                        tb_user.VerticalAlignment = VerticalAlignment.Center;
+                        tb_user.Margin = new Thickness(10, 10, 10, 10);
+                        tb_user.TextWrapping = TextWrapping.Wrap;
+                        tb_user.MaxWidth = 400;
+                        tb_user.HorizontalAlignment = HorizontalAlignment.Center;
+                        msg.Child = tb_user;
+
+                        Button file_btn = new Button();
+                        file_btn.Margin = new Thickness(10, 5, 0, 0);
+                        file_btn.Content = add_file.Name;
+                        file_btn.HorizontalAlignment = HorizontalAlignment.Right;
+                        file_btn.CornerRadius = new CornerRadius(15);
+                        file_btn.Background = new SolidColorBrush(Colors.AliceBlue);
+                        chat.Children.Add(file_btn);
+
                     }
                 }
-                Border msg = new Border();
-                msg.Margin = new Thickness(10, 10, 20, 10);
-                msg.Background = new SolidColorBrush(Colors.LightGray);
-                msg.MaxWidth = 400;
-                msg.CornerRadius = new CornerRadius(15);
-                msg.HorizontalAlignment = HorizontalAlignment.Right;
-                chat.Children.Add(msg);
-
-                TextBlock tb_user = new TextBlock();
-                tb_user.Text = $"{msg_text.Text}\n\n {DateTime.Now.ToString("dd.MM.yyyy HH:mm")}";
-                tb_user.Margin = new Thickness(10, 20, 20, 10);
-                tb_user.VerticalAlignment = VerticalAlignment.Center;
-                tb_user.Margin = new Thickness(10, 10, 10, 10);
-                tb_user.TextWrapping = TextWrapping.Wrap;
-                tb_user.MaxWidth = 400;
-                tb_user.HorizontalAlignment = HorizontalAlignment.Center;
-                msg.Child = tb_user;
-
                 
 
+                
+                file_bool = false;
+                file_border.Visibility = Visibility.Collapsed;
                 msg_text.Text = "";
                 
             }
@@ -499,6 +551,7 @@ namespace App2
             picker.FileTypeFilter.Add(".zip");
             picker.FileTypeFilter.Add(".doc");
             picker.FileTypeFilter.Add(".docx");
+            picker.FileTypeFilter.Add(".txt");
             picker.FileTypeFilter.Add(".xlsx");
 
             add_file = await picker.PickSingleFileAsync();

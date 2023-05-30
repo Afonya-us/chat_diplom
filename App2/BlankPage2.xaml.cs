@@ -9,6 +9,7 @@ using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.Storage.Streams;
 using Windows.System;
+using Windows.UI;
 using Windows.UI.Core;
 using Windows.UI.Popups;
 using Windows.UI.ViewManagement;
@@ -68,37 +69,47 @@ namespace App2
         {
             using (SqlConnection connection = new SqlConnection(connection_string))
             {
-                byte[] us_img_data = null;
-                SqlCommand command = new SqlCommand("select user_img from dbo.user_list where user_id=@user", connection);
-                command.Parameters.AddWithValue("@user", user);
-                connection.Open();
-                using (SqlDataReader reader = command.ExecuteReader())
+                try
                 {
-                    while (reader.Read())
+                    byte[] us_img_data = null;
+                    SqlCommand command = new SqlCommand("select user_img from dbo.user_list where user_id=@user", connection);
+                    command.Parameters.AddWithValue("@user", user);
+                    connection.Open();
+                    using (SqlDataReader reader = command.ExecuteReader())
                     {
-                        us_img_data = (byte[])reader.GetValue(0);
-                    }
-
-                    using (var stream = new InMemoryRandomAccessStream())
-                    {
-                        using (var writer = new DataWriter(stream.GetOutputStreamAt(0)))
+                        while (reader.Read())
                         {
-                            writer.WriteBytes(us_img_data);
-                            await writer.StoreAsync();
+                            us_img_data = (byte[])reader.GetValue(0);                          
                         }
 
-                        var bitmap = new BitmapImage();
-                        await bitmap.SetSourceAsync(stream);
 
-                        var brush = new ImageBrush { ImageSource = bitmap };
-                        await Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal,
-                        () =>
+
+                        using (var stream = new InMemoryRandomAccessStream())
                         {
-                            ellipse.Background = brush;
+                            using (var writer = new DataWriter(stream.GetOutputStreamAt(0)))
+                            {
+                                writer.WriteBytes(us_img_data);
+                                await writer.StoreAsync();
+                            }
 
-                        });
+                            var bitmap = new BitmapImage();
+                            await bitmap.SetSourceAsync(stream);
+
+                            var brush = new ImageBrush { ImageSource = bitmap };
+                            await Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal,
+                            () =>
+                            {
+                                ellipse.Background = brush;
+
+                            });
+                        }
                     }
                 }
+                catch(Exception ex)
+                {
+                    ellipse.Background = new SolidColorBrush(Colors.Azure);
+                }
+
             }
         }
 
