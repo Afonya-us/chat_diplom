@@ -1,5 +1,5 @@
-﻿<Page Name="bp2"
-    x:Class="App2.BlankPage2"
+﻿<Page Name="bp3"
+    x:Class="App2.BlankPage3"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:App2"
@@ -9,12 +9,11 @@
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" Height="600" Width="400">
 
     <Grid>
-        <Button HorizontalAlignment="Left" BorderThickness="0" x:Name="ellipse" Click="ellipse_Click" Height="80" Margin="40,40,0,0" CornerRadius="45" VerticalAlignment="Top" Width="80"/>
+        <Button HorizontalAlignment="Left" BorderThickness="0" x:Name="ellipse" Height="80" Margin="40,40,0,0" CornerRadius="45" VerticalAlignment="Top" Width="80"/>
         <TextBox HorizontalAlignment="Left" MaxLength="20" x:Name="username_text" Margin="125,58,0,0" TextWrapping="NoWrap" BorderThickness="1" CornerRadius="15" TextAlignment="Left" VerticalAlignment="Top" FontSize="24" Width="247"/>
-        <Button Content="Принять" x:Name="acc_chng" Background="AliceBlue" Click="acc_chng_Click" CornerRadius="10" Height="40" Width="80" Margin="0,0,20,20" HorizontalAlignment="Right" VerticalAlignment="Bottom"/>
         <TextBlock HorizontalAlignment="Left" Margin="80,160,0,0" TextWrapping="Wrap" x:Name="user_otd" VerticalAlignment="Top" Height="41"  FontSize="24" Width="228"/>
         <Border BorderBrush="Black" BorderThickness="1" CornerRadius="15"/>
-        <Button Margin="20,0,0,30" Background="White" Click="Button_Click" Content="Bыйти" VerticalAlignment="Bottom" Height="29" Width="64" RenderTransformOrigin="0.266,0.655"/>
+        <Button Margin="0,0,20,30" CornerRadius="10" Background="AliceBlue" Height="50" Width="80" Click="Button_Click" Content="Bыйти" HorizontalAlignment="Right" VerticalAlignment="Bottom"  RenderTransformOrigin="0.266,0.655"/>
 
 
     </Grid>

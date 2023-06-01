@@ -6,9 +6,10 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
-    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" >
 
-    <Grid Background="AliceBlue">
+    <Grid Background="AliceBlue" >
         <Grid.RowDefinitions >
             <RowDefinition Height="0.10*"/>
             <RowDefinition Height="0.75*"/>
@@ -19,8 +20,15 @@
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
         <TextBox x:Name="msg_text" Grid.Row="2" Grid.Column="1" TextWrapping="Wrap" AcceptsReturn="True" ScrollViewer.IsVerticalRailEnabled="True" Margin="20,0,190,20" VerticalAlignment="Center" BorderThickness="0"  MaxHeight="105" CornerRadius="15" Height="55" Background="White"  ></TextBox>
-        <Button x:Name="send_btn" Grid.Row="2" Click="send_btn_Click" Grid.Column="1" Width="75" Height="55" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,50,20" CornerRadius="20" Background="#FF2B9FEA"></Button>
-        <Button x:Name="file_btn" Grid.Row="2" Click="file_btn_Click" Grid.Column="1" Width="55" Height="55" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,130,20" CornerRadius="20" Background="LightSkyBlue"></Button>
+        <Button x:Name="send_btn" Grid.Row="2" Click="send_btn_Click" Grid.Column="1" Width="75" Height="55" VerticalAlignment="Center" HorizontalAlignment="Right" Background="#85CDF9" Margin="0,0,50,20" CornerRadius="20" >
+            
+                <Image Source="assets/image/send.png" Stretch="Uniform" Width="60" Height="60" Margin="-2,-8,-3,-10"/>
+            
+        </Button>
+        <Button x:Name="file_btn" Grid.Row="2" Click="file_btn_Click" Grid.Column="1" Width="55" Height="55" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,130,20" CornerRadius="20" Background="#FF85CDF9">
+
+            <Image Source="assets/image/file.png" Width="60" Height="60" Margin="-12,-8,-13,-10"/>
+        </Button>
 
 
 
@@ -37,12 +45,14 @@
 
             </StackPanel>
         </ScrollViewer>
-        <Button Grid.Row="1" Grid.Column="1" Width="35" Height="35" Content="X" CornerRadius="90" Visibility="Collapsed" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0,-10,15,10" x:Name="close_dial" Click="close_dial_Click"/>
+        <Button Grid.Row="1" Grid.Column="1" Width="35" Height="35" Content="X" CornerRadius="90" Visibility="Collapsed" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0,-50,15,10" x:Name="close_dial" Click="close_dial_Click"/>
 
-        <TextBox x:Name="tb1" FontSize="18"  HorizontalAlignment="Center" Grid.Row="0" Grid.Column="0" BorderThickness="1" PlaceholderText="Найти..." TextWrapping="Wrap" Height="35" MinWidth="200" MaxWidth="320" MaxLength="20" VerticalAlignment="Center" Margin="0,15,15,0" Background="White" CornerRadius="10"/>
+        <TextBox x:Name="tb1" FontSize="18"  HorizontalAlignment="Center" Grid.Row="0" Grid.Column="0" BorderThickness="1" PlaceholderText="Найти..." TextWrapping="Wrap" Height="35" MinWidth="200" MaxWidth="320" MaxLength="20" VerticalAlignment="Center" Margin="0,0,15,0" Background="White" CornerRadius="10"/>
 
-        <Button Grid.Row="0" x:Name="find" Click="find_Click" Grid.Column="0" Width="35" Height="35" VerticalAlignment="Center" HorizontalAlignment="Right" CornerRadius="10" Background="#FF2B9FEA" Margin="0,15,15,0"></Button>
-
+        <Button Grid.Row="0" x:Name="find" Click="find_Click" Grid.Column="0" Width="45" Height="45" VerticalAlignment="Center" HorizontalAlignment="Right" Background="AliceBlue"  CornerRadius="10"  Margin="0,0,15,0">
+            <Image Source="assets/image/loop.png" Margin="-10,-10,-10,-10"/>
+        </Button>
+        
         <Button x:Name="user_image" Click="user_image_Click" HorizontalAlignment="Left" VerticalAlignment="Center" Height="80" CornerRadius="90" Background="Bisque" Margin="10,0,0,0" Grid.Row="2" Grid.Column="0" Width="80"/>
         <TextBlock x:Name="user_name" Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="100,0,0,0" Text="gfdhfd" FontSize="28"/>
 

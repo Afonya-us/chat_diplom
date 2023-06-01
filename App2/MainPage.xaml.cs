@@ -23,6 +23,8 @@ using Windows.UI.Xaml.Media.Animation;
 using Microsoft.Identity.Client;
 using System.Text.RegularExpressions;
 using Windows.UI.ViewManagement;
+using System.Diagnostics;
+using Windows.Storage;
 
 
 // Документацию по шаблону элемента "Пустая страница" см. по адресу https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x419
@@ -45,8 +47,7 @@ namespace App2
             round_st.Fill = new SolidColorBrush(Colors.Gray);
             string ServerInfo = string.Empty;
 
-
-            ApplicationView.PreferredLaunchWindowingMode = ApplicationViewWindowingMode.Auto;
+            
 
 
             /*round.Visibility = Visibility.Visible;

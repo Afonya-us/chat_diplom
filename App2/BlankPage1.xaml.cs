@@ -31,6 +31,14 @@ using Windows.UI.Core;
 using Windows.UI.Xaml.Media.Imaging;
 using Windows.Storage.Streams;
 using System.Runtime.Serialization.Formatters.Binary;
+using Windows.UI.WindowManagement;
+using Windows.UI.ViewManagement;
+using Windows.ApplicationModel.Core;
+using Windows.ApplicationModel;
+using Windows.Storage;
+using static System.Net.Mime.MediaTypeNames;
+using Microsoft.Toolkit.Uwp.Helpers;
+using Windows.Storage.Pickers;
 
 // Документацию по шаблону элемента "Пустая страница" см. по адресу https://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -66,6 +74,9 @@ namespace App2
             connection_string = "Server=" + conn + "; Database = Chat; user=admin; password=admin; encrypt = false;";
             show_dialogs();
         }
+
+
+       
 
         public async void show_dialogs()
         {
@@ -146,8 +157,9 @@ namespace App2
         {
             this.InitializeComponent();
             load_image();
-            
         }
+
+        
 
         public async void get_img()
         {           
@@ -360,6 +372,8 @@ namespace App2
                                 file_btn.HorizontalAlignment = HorizontalAlignment.Right;
                                 file_btn.CornerRadius = new CornerRadius(15);
                                 file_btn.Background = new SolidColorBrush(Colors.AliceBlue);
+                                file_btn.Tapped += new TappedEventHandler(file_btn_click);
+                                file_btn.Name = dt.Rows[i][8].ToString();
                                 chat.Children.Add(file_btn);
                             }
                         }
@@ -391,6 +405,8 @@ namespace App2
                                 file_btn.HorizontalAlignment = HorizontalAlignment.Left;
                                 file_btn.CornerRadius = new CornerRadius(15);
                                 file_btn.Background = new SolidColorBrush(Colors.AliceBlue);
+                                file_btn.Tapped += new TappedEventHandler(file_btn_click);
+                                file_btn.Name = dt.Rows[i][8].ToString();
                                 chat.Children.Add(file_btn);
                             }
                         }
@@ -433,7 +449,7 @@ namespace App2
                 adapter.Fill(ds);
                 DataTable dt = ds.Tables[0];
                 string message = msg_text.Text;
-                if (file_bool==false && message.Length!=0) {
+                if (file_bool == false && message.Length != 0 && dg_op==true) {
                     connection.Open();
                     SqlCommand cmd = new SqlCommand($"insert into dbo.msg_list(msg_sender,msg_getter,msg_text,msg_file,msg_sent) values ('{user}', '{user_flist}','{message}', null,getdate())", connection);
                     cmd.ExecuteNonQuery();
@@ -449,7 +465,7 @@ namespace App2
                     tb_user.Text = $"{msg_text.Text}\n\n {DateTime.Now.ToString("dd.MM.yyyy HH:mm")}";
                     tb_user.Margin = new Thickness(10, 20, 20, 10);
                     tb_user.VerticalAlignment = VerticalAlignment.Center;
-                    tb_user.Margin = new Thickness(10, 10, 10, 10);
+                 
                     tb_user.TextWrapping = TextWrapping.Wrap;
                     tb_user.MaxWidth = 400;
                     tb_user.HorizontalAlignment = HorizontalAlignment.Center;
@@ -457,7 +473,7 @@ namespace App2
                 }
                 else
                 {
-                    if (file_bool == true)
+                    if (file_bool == true && dg_op == true)
                     {
                         connection.Open();
                         SqlCommand cmd = new SqlCommand($"insert into dbo.msg_list(msg_sender,msg_getter,msg_text,msg_sent,msg_file_type,msg_file_name,msg_file) select '{user}', '{user_flist}','{message}', getdate(),'{add_file.FileType}','{add_file.Name}', * FROM OPENROWSET(BULK N'{add_file.Path}', SINGLE_BLOB) rs", connection);
@@ -474,18 +490,20 @@ namespace App2
                         tb_user.Text = $"{msg_text.Text}\n\n {DateTime.Now.ToString("dd.MM.yyyy HH:mm")}";
                         tb_user.Margin = new Thickness(10, 20, 20, 10);
                         tb_user.VerticalAlignment = VerticalAlignment.Center;
-                        tb_user.Margin = new Thickness(10, 10, 10, 10);
+                        
                         tb_user.TextWrapping = TextWrapping.Wrap;
                         tb_user.MaxWidth = 400;
                         tb_user.HorizontalAlignment = HorizontalAlignment.Center;
                         msg.Child = tb_user;
 
                         Button file_btn = new Button();
-                        file_btn.Margin = new Thickness(10, 5, 0, 0);
+                        file_btn.Margin = new Thickness(0, -20, 10, 0);
                         file_btn.Content = add_file.Name;
                         file_btn.HorizontalAlignment = HorizontalAlignment.Right;
                         file_btn.CornerRadius = new CornerRadius(15);
                         file_btn.Background = new SolidColorBrush(Colors.AliceBlue);
+                        file_btn.Tapped += new TappedEventHandler(file_btn_click);
+                        file_btn.Name = add_file.Name;
                         chat.Children.Add(file_btn);
 
                     }
@@ -500,7 +518,57 @@ namespace App2
             }
         }
 
-        
+        public async void file_btn_click(object sender, TappedRoutedEventArgs e)
+        {           
+            var file_msg = ((FrameworkElement)sender).Name;
+            
+            using (SqlConnection connection = new SqlConnection(connection_string))
+            {
+                
+                SqlCommand cmd = new SqlCommand($"select msg_file from dbo.msg_list where msg_file_name='{file_msg}'", connection);
+                byte[] file_data = null;
+                connection.Open();
+                using (SqlDataReader reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        file_data = (byte[])reader.GetValue(0);
+                    }
+                }
+                var folderPicker = new Windows.Storage.Pickers.FolderPicker();
+                folderPicker.SuggestedStartLocation = Windows.Storage.Pickers.PickerLocationId.Desktop;
+                folderPicker.FileTypeFilter.Add("*");
+
+                Windows.Storage.StorageFolder folder = await folderPicker.PickSingleFolderAsync();
+                if (folder != null)
+                {
+                    // Application now has read/write access to all contents in the picked folder
+                    // (including other sub-folder contents)
+                    Windows.Storage.AccessCache.StorageApplicationPermissions.
+                    FutureAccessList.AddOrReplace("PickedFolderToken", folder);                  
+                    await folder.WriteBytesToFileAsync(file_data, file_msg);
+
+                    var dialog = new MessageDialog($"Файл {file_msg} успешно сохранён");
+                    dialog.Commands.Add(new UICommand("Открыть папку", null));
+                    dialog.Commands.Add(new UICommand("Ок", null));
+                    dialog.DefaultCommandIndex = 0;
+                    dialog.DefaultCommandIndex = 1;
+                    var dial = await dialog.ShowAsync();
+                    if(dial.Label=="Открыть папку")
+                    {
+                        await Windows.System.Launcher.LaunchFolderAsync(folder);
+                    }
+                }
+                else
+                {
+                }
+
+
+
+
+
+            }          
+        }
 
         public void close_dial_Click(object sender, RoutedEventArgs e)
         {
@@ -522,6 +590,7 @@ namespace App2
 
         private void dial_image_Click(object sender, RoutedEventArgs e)
         {
+            Frame.Navigate(typeof(BlankPage3), arr+"_"+user_flist);
 
         }
 
@@ -562,10 +631,11 @@ namespace App2
 
                 file_border.Visibility = Visibility.Visible;
 
-                TextBlock file_name = new TextBlock();
-                file_name.Text = add_file.Name;
+                Button file_name = new Button();
+                file_name.Content = add_file.Name;
                 file_name.VerticalAlignment = VerticalAlignment.Center;
                 file_name.HorizontalAlignment = HorizontalAlignment.Center;
+                file_name.Tapped += new TappedEventHandler(file_btn_click);
                 file_border.Child=file_name;
             }
             else

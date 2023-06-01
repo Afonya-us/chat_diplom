@@ -35,10 +35,12 @@ namespace App2
         public object arr;
         public int user;
         public string conn;
+        public object data;
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             arr = e.Parameter;
+            data = arr;
             string[] splited = arr.ToString().Split("_");
             conn = splited[1].ToString();
             user = Convert.ToInt32(splited[0]);
@@ -113,10 +115,12 @@ namespace App2
             }
         }
 
+        
+
         public BlankPage2()
         {
             this.InitializeComponent();
-
+            
 
         }
 
@@ -197,6 +201,20 @@ namespace App2
                  }
                  
         }
-        }    
+        }
+
+        private async void Button_Click(object sender, RoutedEventArgs e)
+        {
+            var dialog = new MessageDialog("Вы уверены, что хотите выйти?");
+            dialog.Commands.Add(new UICommand("Да", null));
+            dialog.Commands.Add(new UICommand("Нет", null));
+            dialog.DefaultCommandIndex = 0;
+            dialog.CancelCommandIndex = 1;
+            var cmd = await dialog.ShowAsync();
+            if (cmd.Label=="Да")
+            {
+                Frame.Navigate(typeof(MainPage));
+            }
+        }
     }
 }

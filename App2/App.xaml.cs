@@ -5,8 +5,10 @@ using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
+using Windows.ApplicationModel.Core;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -29,7 +31,7 @@ namespace App2
         public App()
         {
             this.InitializeComponent();
-            this.Suspending += OnSuspending;
+            
         }
 
         /// <summary>
@@ -96,5 +98,6 @@ namespace App2
             //TODO: Сохранить состояние приложения и остановить все фоновые операции
             deferral.Complete();
         }
+
     }
 }
