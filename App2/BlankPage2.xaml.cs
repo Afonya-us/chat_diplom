@@ -59,6 +59,10 @@ namespace App2
                 int otdid = Convert.ToInt32(dt.Rows[0][8]);
                 SqlCommand cmd = new SqlCommand($"select otd_name from otd where otd_id = '{otdid}'", connection);
                 string otdname = (String)cmd.ExecuteScalar();
+                if (dt.Rows[0][9].ToString()!=string.Empty)
+                {
+                    user_about.Text = dt.Rows[0][9].ToString();
+                }
                 user_otd.Text = "отдел: "+otdname;
                 set_user_img();
 
@@ -136,7 +140,7 @@ namespace App2
                 DataTable dt = ds.Tables[0];
                 try
                 {
-                    SqlCommand command = new SqlCommand($"UPDATE user_list SET user_nickname ='{username_text.Text}' WHERE user_id = '{user}'", connection);
+                    SqlCommand command = new SqlCommand($"UPDATE user_list SET user_nickname ='{username_text.Text}', user_about = '{user_about.Text}' WHERE user_id = '{user}'", connection);
 
                     connection.Open();
                     command.ExecuteNonQuery();
@@ -195,7 +199,7 @@ namespace App2
                             username_text.Text = ex.ToString();
                         }
                         
-                        
+                        /*добавить "о себе", убрать на логине "робит/не робит"*/
                      }
 
                  }

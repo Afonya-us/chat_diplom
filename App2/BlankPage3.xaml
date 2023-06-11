@@ -10,9 +10,14 @@
 
     <Grid>
         <Button HorizontalAlignment="Left" BorderThickness="0" x:Name="ellipse" Height="80" Margin="40,40,0,0" CornerRadius="45" VerticalAlignment="Top" Width="80"/>
-        <TextBox HorizontalAlignment="Left" MaxLength="20" x:Name="username_text" Margin="125,58,0,0" TextWrapping="NoWrap" BorderThickness="1" CornerRadius="15" TextAlignment="Left" VerticalAlignment="Top" FontSize="24" Width="247"/>
-        <TextBlock HorizontalAlignment="Left" Margin="80,160,0,0" TextWrapping="Wrap" x:Name="user_otd" VerticalAlignment="Top" Height="41"  FontSize="24" Width="228"/>
-        <Border BorderBrush="Black" BorderThickness="1" CornerRadius="15"/>
+        <TextBlock HorizontalAlignment="Left"  x:Name="username_text" Margin="131,58,0,0" Height="40" TextWrapping="NoWrap"  TextAlignment="Left" VerticalAlignment="Top" FontSize="24" Width="238"/>
+        <Border HorizontalAlignment="Left" Height="40" BorderBrush="Black" CornerRadius="15" Margin="125,58,0,0"  VerticalAlignment="Top" BorderThickness="1" Width="247"></Border>
+
+        <TextBlock Margin="40,160,40,0" TextWrapping="Wrap" x:Name="user_about" VerticalAlignment="Top" FontSize="16"/>
+        <TextBlock Margin="40,260,40,0" TextWrapping="Wrap" x:Name="user_otd" VerticalAlignment="Top" Height="41"  FontSize="24"/>
+        <Border BorderBrush="Black" BorderThickness="1" CornerRadius="15">
+            <Border BorderBrush="Black" BorderThickness="1"/>
+        </Border>
         <Button Margin="0,0,20,30" CornerRadius="10" Background="AliceBlue" Height="50" Width="80" Click="Button_Click" Content="Bыйти" HorizontalAlignment="Right" VerticalAlignment="Bottom"  RenderTransformOrigin="0.266,0.655"/>
 
 

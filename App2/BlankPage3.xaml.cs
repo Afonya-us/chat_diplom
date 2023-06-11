@@ -66,9 +66,12 @@ namespace App2
                 username_text.Text = dt.Rows[0][6].ToString();
                 int otdid = Convert.ToInt32(dt.Rows[0][8]);
                 SqlCommand cmd = new SqlCommand($"select otd_name from dbo.otd where otd_id = '{otdid}'", connection);
-                string otdname = (String)cmd.ExecuteScalar();
+                string otdname =(String)cmd.ExecuteScalar();
                 user_otd.Text = "Отдел: " + otdname;
-
+                if (dt.Rows[0][9].ToString() != string.Empty)
+                {
+                    user_about.Text = dt.Rows[0][9].ToString();
+                }
                 set_user_img();
             }
         }

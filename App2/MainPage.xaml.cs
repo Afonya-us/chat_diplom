@@ -46,20 +46,6 @@ namespace App2
             this.InitializeComponent();          
             round_st.Fill = new SolidColorBrush(Colors.Gray);
             string ServerInfo = string.Empty;
-
-            
-
-
-            /*round.Visibility = Visibility.Visible;
-
-            DoubleAnimation buttonAnimation = new DoubleAnimation();
-            buttonAnimation.From = round.ActualWidth;
-            buttonAnimation.To = 150;
-            buttonAnimation.Duration = TimeSpan.FromSeconds(3);
-            buttonAnimation.RepeatBehavior = RepeatBehavior.Forever;
-            round.be*/
-
-
             //Получение доступных SQL серверов.
             DataTable dt = Microsoft.Data.Sql.SqlDataSourceEnumerator.Instance.GetDataSources();
             foreach (DataRow dr in dt.Rows)
@@ -124,7 +110,7 @@ namespace App2
                 {
                     if (connection.State == ConnectionState.Closed)
                     {
-                        textblock.Text = "не робит";
+                        
                         round_st.Fill = new SolidColorBrush(Colors.Red);
                         con_status = false;
                         login.IsEnabled = true;
@@ -133,7 +119,7 @@ namespace App2
                     }
                     else
                     {
-                        textblock.Text = "робит";
+                        
                         round_st.Fill = new SolidColorBrush(Colors.Green);
                         con_status = true;
                         login.IsEnabled = true;

@@ -12,7 +12,8 @@
         <Button HorizontalAlignment="Left" BorderThickness="0" x:Name="ellipse" Click="ellipse_Click" Height="80" Margin="40,40,0,0" CornerRadius="45" VerticalAlignment="Top" Width="80"/>
         <TextBox HorizontalAlignment="Left" MaxLength="20" x:Name="username_text" Margin="125,58,0,0" TextWrapping="NoWrap" BorderThickness="1" CornerRadius="15" TextAlignment="Left" VerticalAlignment="Top" FontSize="24" Width="247"/>
         <Button Content="Принять" x:Name="acc_chng" Background="AliceBlue" Click="acc_chng_Click" CornerRadius="10" Height="40" Width="80" Margin="0,0,20,20" HorizontalAlignment="Right" VerticalAlignment="Bottom"/>
-        <TextBlock HorizontalAlignment="Left" Margin="80,160,0,0" TextWrapping="Wrap" x:Name="user_otd" VerticalAlignment="Top" Height="41"  FontSize="24" Width="228"/>
+        <TextBox Margin="40,160,40,0" TextWrapping="Wrap" x:Name="user_about" VerticalAlignment="Top" CornerRadius="15" Height="95" FontSize="16" PlaceholderText="Напишите о себе:" />
+        <TextBlock Margin="40,260,40,0" TextWrapping="Wrap" x:Name="user_otd" VerticalAlignment="Top"  Height="41"  FontSize="24"/>
         <Border BorderBrush="Black" BorderThickness="1" CornerRadius="15"/>
         <Button Margin="20,0,0,30" Background="White" Click="Button_Click" Content="Bыйти" VerticalAlignment="Bottom" Height="29" Width="64" RenderTransformOrigin="0.266,0.655"/>
 
